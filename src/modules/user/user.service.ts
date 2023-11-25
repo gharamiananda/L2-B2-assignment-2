@@ -4,8 +4,8 @@ import User from './user.model';
 
 export const createUserIntoDB = async (user: TUser) => {
   const userId = Number(user.userId);
-  if (!(await User.isUserExists(userId))) {
-    throw new Error('User not exists');
+  if (await User.isUserExists(userId)) {
+    throw new Error('User already exists with this userId');
   }
 
   const data = await User.create(user);

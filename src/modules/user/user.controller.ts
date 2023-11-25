@@ -48,7 +48,6 @@ export const createUser = async (
 
     const userInfo = studentValidationSchema.parse(userData);
 
-    console.log('userInfo', userInfo);
     const data = await createUserIntoDB(userInfo);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userDataWithoutPassword } = data.toObject();
@@ -209,6 +208,8 @@ export const updateUser = async (
           .string()
           .max(20, { message: 'First Name is less than 20 characters' }),
       }),
+      hobbies: z.array(z.string()),
+
       age: z.number(),
       email: z.string(),
       isActive: z.boolean(),
