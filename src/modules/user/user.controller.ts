@@ -58,23 +58,11 @@ export const createUser = async (
       data: userDataWithoutPassword,
     });
   } catch (error) {
-    if (error == 'Error: User not exists') {
-      res.status(500).json({
-        success: false,
-        message: 'User not found',
-
-        error: {
-          code: 404,
-          description: 'User not found!',
-        },
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        message: 'Something went wrong',
-        error,
-      });
-    }
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error,
+    });
   }
 };
 
