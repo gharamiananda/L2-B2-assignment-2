@@ -49,6 +49,7 @@ export const createUser = async (
     const userInfo = studentValidationSchema.parse(userData);
 
     const data = await createUserIntoDB(userInfo);
+    console.log('data', data);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userDataWithoutPassword } = data.toObject();
     res.status(200).json({
