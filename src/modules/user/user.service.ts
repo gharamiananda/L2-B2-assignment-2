@@ -100,7 +100,6 @@ export const geOrdersTotalUserFromDB = async (userId: string) => {
         _id: '$_id',
         totalPrice: {
           $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
-          // $push: '$$ROOT',
         },
       },
     },
