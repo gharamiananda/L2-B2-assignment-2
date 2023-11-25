@@ -3,6 +3,11 @@ import { TUpdateUser, TUser } from './user.interface';
 import User from './user.model';
 
 export const createUserIntoDB = async (user: TUser) => {
+  const userId = Number(user.userId);
+  if (!(await User.isUserExists(userId))) {
+    throw new Error('User not exists');
+  }
+
   const data = await User.create(user);
   return data;
 };
@@ -23,7 +28,7 @@ export const getUserFromDB = async (userId: string) => {
 };
 
 export const deleteUserFromDB = async (userId: string) => {
-  if (!(await User.isUserExists(userId))) {
+  if (!(await User.isUserExists(Number(userId)))) {
     throw new Error('User not exists');
   }
 
@@ -36,7 +41,7 @@ export const updatedUserFromDB = async (
   userId: string,
   userData: TUpdateUser,
 ) => {
-  const isUserExists = await User.isUserExists(userId);
+  const isUserExists = await User.isUserExists(Number(userId));
   if (!isUserExists) {
     throw new Error('User not exists');
   }
@@ -62,11 +67,11 @@ export const updatedOrderUserFromDB = async (
   userId: string,
   orderData: TProduct[],
 ) => {
-  if (!(await User.isUserExists(userId))) {
+  if (!(await User.isUserExists(Number(userId)))) {
     throw new Error('User not exists');
   }
   const orderInfo = await User.findOneAndUpdate(
-    { userId },
+    { userId: Number(userId) },
     { $push: { orders: orderData } },
     { new: true, projection: { fullName: 0 } },
   );
@@ -75,15 +80,15 @@ export const updatedOrderUserFromDB = async (
 };
 
 export const geOrdersUserFromDB = async (userId: string) => {
-  if (!(await User.isUserExists(userId))) {
+  if (!(await User.isUserExists(Number(userId)))) {
     throw new Error('User not exists');
   }
-  const data = await User.findOne({ userId }, { orders: 1 });
+  const data = await User.findOne({ userId: Number(userId) }, { orders: 1 });
   return data;
 };
 
 export const geOrdersTotalUserFromDB = async (userId: string) => {
-  if (!(await User.isUserExists(userId))) {
+  if (!(await User.isUserExists(Number(userId)))) {
     throw new Error('User not exists');
   }
   const data = await User.aggregate([

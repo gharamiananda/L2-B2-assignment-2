@@ -38,5 +38,5 @@ export type TUpdateUser = {
 };
 
 export interface UserModel extends Model<TUser> {
-  isUserExists(userId: string): Promise<boolean | null>;
+  isUserExists(userId: number): Promise<boolean | null>;
 }

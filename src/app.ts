@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application } from 'express';
 import cors from 'cors';
 import userRoute from './modules/user/user.route';
 
@@ -16,33 +16,33 @@ app.get('/', (req, res) => {
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-app.use((error: any, req: Request, res: Response) => {
-  if (error) {
-    if (error.name == 'ZodError') {
-      res.status(500).json({
-        success: false,
-        message: 'ZOD Error',
-        error,
-      });
+// app.use((error: any, req: Request, res: Response) => {
+//   if (error) {
+//     if (error.name == 'ZodError') {
+//       res.status(500).json({
+//         success: false,
+//         message: 'ZOD Error',
+//         error,
+//       });
 
-      return;
-    } else if (error.name == 'CastError') {
-      res.status(500).json({
-        success: false,
-        message: 'CastError hhhh',
-        error,
-      });
+//       return;
+//     } else if (error.name == 'CastError') {
+//       res.status(500).json({
+//         success: false,
+//         message: 'CastError hhhh',
+//         error,
+//       });
 
-      return;
-    }
-  } else {
-    res.status(500).json({
-      success: false,
-      message: 'Something went wrong',
-      error,
-    });
-  }
-});
+//       return;
+//     }
+//   } else {
+//     res.status(500).json({
+//       success: false,
+//       message: 'Something went wrong',
+//       error,
+//     });
+//   }
+// });
 
 app.all('*', (req, res) => {
   res.status(400).json({

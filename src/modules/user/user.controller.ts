@@ -35,6 +35,7 @@ export const createUser = async (
           .string()
           .max(20, { message: 'Last Name is less than 20 characters' }),
       }),
+      hobbies: z.array(z.string()),
       age: z.number(),
       email: z.string(),
       isActive: z.boolean(),
@@ -46,6 +47,8 @@ export const createUser = async (
     });
 
     const userInfo = studentValidationSchema.parse(userData);
+
+    console.log('userInfo', userInfo);
     const data = await createUserIntoDB(userInfo);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userDataWithoutPassword } = data.toObject();
@@ -55,12 +58,23 @@ export const createUser = async (
       data: userDataWithoutPassword,
     });
   } catch (error) {
-    next(error);
-    // res.status(500).json({
-    //   success: false,
-    //   message: 'User created Failed',
-    //   error,
-    // });
+    if (error == 'Error: User not exists') {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Something went wrong',
+        error,
+      });
+    }
   }
 };
 
@@ -74,11 +88,23 @@ export const getUsers = async (req: Request, res: Response) => {
       data,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'User not found',
-      error,
-    });
+    if (error == 'Error: User not exists') {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Something went wrong',
+        error,
+      });
+    }
   }
 };
 
@@ -107,12 +133,11 @@ export const getUser = async (
       data,
     });
   } catch (error) {
-    next(error);
-    // res.status(500).json({
-    //   success: false,
-    //   message: 'User not found',
-    //   error,
-    // });
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error,
+    });
   }
 };
 
